@@ -30,7 +30,7 @@ export default function Navbar() {
               onClick={() => setLogout(!logout)} // Update to appropriate action
               className="py-1 block md:py-1.5 text-sm md:text-base px-3 md:px-4 rounded-md hover:text-red-600 transition-colors ease-in duration-200 scale-105"
             >
-              {user.email} {/* Or user.displayName if available */}
+              {user.displayName} {/* Or user.displayName if available */}
             </button>
             {logout && (
               <button

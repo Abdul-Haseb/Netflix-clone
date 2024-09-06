@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserSignUp } from "../firebase/AuthService";
 import { AuthContext } from "../context/AuthContext";
+import { updateProfile } from "firebase/auth";
 
 // Functional component for the Signup page
 export default function Signup() {
@@ -25,7 +26,7 @@ export default function Signup() {
   }
 
   // Get Auth context to manage user authentication state
-  const { setUser } = authContext;
+  const { user, setUser } = authContext;
 
   console.log(formData.name);
   // Handler function for form submission
@@ -41,8 +42,13 @@ export default function Signup() {
 
       // Check if userCredential is defined before calling setUser
       if (userCredential) {
+        await updateProfile(userCredential.user, {
+          displayName: formData.name,
+        });
         setUser(userCredential.user); // Set the user in context
       }
+
+      console.log(user);
     } catch (error) {
       // Log any errors that occur during the sign-up process
       console.log(error);
@@ -76,6 +82,21 @@ export default function Signup() {
         </h2>
         <div>
           <form onSubmit={handleSubmit}>
+            {/* Name input field */}
+            <div className="mt-3 mb-6">
+              <input
+                type="text" // Input type for email
+                name=""
+                required // Makes the field mandatory
+                value={formData.name} // Value is controlled by formData state
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                placeholder="Name" // Placeholder text
+                id=""
+                className="border border-gray-700 bg-gray-900 text-gray-200 px-4 py-1.5 md:p-4 rounded-md outline-none w-full md:w-72 lg:w-80"
+              />
+            </div>
             {/* Email input field */}
             <div className="mt-3 mb-6">
               <input
